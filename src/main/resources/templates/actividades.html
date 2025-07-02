@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Actividades</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Actividades Realizadas</h1>
+        
+        <table id="tabla-actividades">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha Inicio</th>
+                    <th>Sector</th>
+                    <th>Nombre</th>
+                    <th>Tema</th>
+                    <th>Nota</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="actividad : ${actividades}">
+                    <td th:text="${actividad.id}"></td>
+                    <td th:text="${#temporals.format(actividad.fechaInicio, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${actividad.sector}"></td>
+                    <td th:text="${actividad.nombreOrganizador}"></td>
+                    <td th:text="${actividad.tema}"></td>
+                    <td class="nota-promedio" th:attr="data-id=${actividad.id}">
+                        <span th:if="${actividad.promedio != null}" 
+                              th:text="${#numbers.formatDecimal(actividad.promedio, 1, 1)}"></span>
+                        <span th:if="${actividad.promedio == null}">-</span>
+                    </td>
+                    <td>
+                        <button class="btn-evaluar" th:attr="data-id=${actividad.id}">
+                            evaluar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Modal para evaluar -->
+        <div id="modal-evaluacion" class="modal">
+            <div class="modal-content">
+                <h3>Evaluar Actividad</h3>
+                <p>Seleccione una nota del 1 al 7:</p>
+                <select id="select-nota">
+                    <option value="">Seleccionar nota</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+                <div class="modal-buttons">
+                    <button id="btn-confirmar-nota">Confirmar</button>
+                    <button id="btn-cancelar">Cancelar</button>
+                </div>
+                <div id="mensaje-error" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script th:src="@{/js/evaluacion.js}"></script>
+</body>
+</html>
